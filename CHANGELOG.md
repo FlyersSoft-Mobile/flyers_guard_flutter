@@ -1,7 +1,2 @@
-## 1.1.2
-- Client-facing README (full root/jailbreak check reference + install guide); pin install ref to v1.1.2.
-
-## 1.0.0
-- Initial release. Method-channel wrapper over the prebuilt FlyersGuard Android
-  AAR and iOS XCFramework. Root/jailbreak reports plus Play Integrity token
-  request and backend verification helper.
+## 0.1.0
+- First feature release: Android root detection (6 checks) and iOS jailbreak detection (3 checks), shipped as a Dart bridge over prebuilt native binaries.

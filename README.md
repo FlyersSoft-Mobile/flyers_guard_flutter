@@ -52,7 +52,7 @@ dependencies:
   flyers_guard:
     git:
       url: https://github.com/FlyersSoft-Mobile/flyers_guard_flutter.git
-      ref: v1.1.2
+      ref: v0.1.0
 ```
 
 Then fetch it:

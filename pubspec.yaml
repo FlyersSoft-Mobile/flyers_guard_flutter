@@ -6,7 +6,7 @@ description: >
   detection logic ships as compiled binaries only -- no native source is
   distributed in this package. Also exposes the Android Play Integrity token
   request plus a backend-verification helper.
-version: 1.1.2
+version: 0.1.0
 homepage: https://github.com/FlyersSoft-Mobile/flyers_guard_flutter
 repository: https://github.com/FlyersSoft-Mobile/flyers_guard_flutter
 publish_to: 'none'
