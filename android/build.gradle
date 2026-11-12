@@ -1,0 +1,44 @@
+group 'com.flyerssoft.flyers_guard'
+version '1.0'
+
+// Captured here so the vendored-AAR repo resolves against THIS plugin's
+// directory, not whichever project applies the repositories block.
+def flyersGuardDir = projectDir
+
+buildscript {
+    ext.kotlin_version = '1.9.10'
+    repositories { google(); mavenCentral() }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // Prebuilt FlyersGuard Android SDK (AAR) vendored inside this package.
+        maven { url "${flyersGuardDir}/m2repository" }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    namespace 'com.flyerssoft.flyers_guard'
+    compileSdk 34
+    defaultConfig { minSdkVersion 21 }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions { jvmTarget = '1.8' }
+}
+
+dependencies {
+    // Prebuilt, obfuscated detection SDK. Pulls its own Play Integrity
+    // transitive dependency from the vendored POM.
+    implementation 'com.flyerssoft:flyers-guard-android:1.1.0'
+}

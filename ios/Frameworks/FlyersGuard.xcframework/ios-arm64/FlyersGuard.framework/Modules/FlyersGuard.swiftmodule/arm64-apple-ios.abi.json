@@ -1,0 +1,209 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "FlyersGuard",
+    "printedName": "FlyersGuard",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FlyersGuard"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FlyersGuard"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FlyersGuard",
+        "printedName": "FlyersGuard",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "jailbreakCheckReport",
+            "printedName": "jailbreakCheckReport()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@FlyersGuard@objc(cs)FlyersGuard(cm)jailbreakCheckReport",
+            "mangledName": "$s11FlyersGuardAAC20jailbreakCheckReportSDySSypGyFZ",
+            "moduleName": "FlyersGuard",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "ObjC",
+              "RawDocComment"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "isDeviceCompromised",
+            "printedName": "isDeviceCompromised()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@FlyersGuard@objc(cs)FlyersGuard(cm)isDeviceCompromised",
+            "mangledName": "$s11FlyersGuardAAC19isDeviceCompromisedSbyFZ",
+            "moduleName": "FlyersGuard",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "ObjC",
+              "RawDocComment"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "FlyersGuard",
+                "printedName": "FlyersGuard.FlyersGuard",
+                "usr": "c:@M@FlyersGuard@objc(cs)FlyersGuard"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@FlyersGuard@objc(cs)FlyersGuard(im)init",
+            "mangledName": "$s11FlyersGuardAACABycfc",
+            "moduleName": "FlyersGuard",
+            "overriding": true,
+            "implicit": true,
+            "objc_name": "init",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:@M@FlyersGuard@objc(cs)FlyersGuard",
+        "mangledName": "$s11FlyersGuardAAC",
+        "moduleName": "FlyersGuard",
+        "declAttributes": [
+          "Final",
+          "AccessControl",
+          "ObjC",
+          "RawDocComment"
+        ],
+        "superclassUsr": "c:objc(cs)NSObject",
+        "inheritsConvenienceInitializers": true,
+        "superclassNames": [
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/tmp\/claude-501\/-Users-apple-Downloads-device-security-check\/5ab2e742-391c-4d91-a3ac-b687cf98f2e5\/scratchpad\/repos\/flyers_guard_ios\/Sources\/FlyersGuard\/FlyersGuard.swift",
+      "kind": "Array",
+      "offset": 1625,
+      "length": 170,
+      "value": "[\"\/Applications\/Cydia.app\", \"\/Library\/MobileSubstrate\/MobileSubstrate.dylib\", \"\/usr\/sbin\/sshd\", \"\/usr\/bin\/ssh\", \"\/etc\/apt\"]"
+    }
+  ]
+}
