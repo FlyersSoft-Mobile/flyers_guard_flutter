@@ -38,11 +38,6 @@ sensitive features).
 check** fires (defense in depth). A clean, unmodified retail device returns
 `false` for every check.
 
-> **Important — these are on-device heuristics.** A `true` result is a reliable
-> signal that the device is compromised. A `false` result is **not** a
-> guarantee the device is clean: tools such as Magisk Hide / Zygisk (Android)
-> and Dopamine / Shadow (iOS) are built specifically to hide from checks like
-> these. Use the result as one input to your security decisions, not as proof.
 
 ---
 
