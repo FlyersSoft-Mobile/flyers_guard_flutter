@@ -10,11 +10,6 @@ on-device checks and gives you a clear verdict plus a per-check breakdown, so
 your app can decide how to react (for example, warn the user or block
 sensitive features).
 
-> **How it ships.** The detection runs inside two **prebuilt, compiled native
-> libraries** — an Android `.aar` and an iOS `.xcframework` — that are bundled
-> with this package. You integrate the plugin and call a simple Dart API; you
-> do not build or see the native detection code. This repository contains only
-> the Dart interface and those binaries.
 
 ---
 
