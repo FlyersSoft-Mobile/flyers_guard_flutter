@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Package-visibility declarations (required on Android 11 / API 30+).
+
+      PackageManager#getPackageInfo() can no longer see other installed
+      apps by default unless they are declared here, or the app holds the
+      QUERY_ALL_PACKAGES permission (which requires special Play Store
+      justification). Declaring the exact known root-management packages
+      here is the correct, minimal-privilege way to make Check 2 ("Known
+      Root Management Apps & Packages") work on modern Android without
+      requesting broad query visibility.
+
+      This queries block is merged into the final host application's
+      manifest automatically by the Android Gradle Plugin's manifest
+      merger; no action is required in the consuming app.
+    -->
+    <queries>
+        <!-- Magisk (Magisk Manager / Zygisk) -->
+        <package android:name="com.topjohnwu.magisk" />
+        <package android:name="com.topjohnwu.magisk.beta" />
+
+        <!-- SuperSU and related su management apps -->
+        <package android:name="eu.chainfire.supersu" />
+        <package android:name="com.koushikdutta.superuser" />
+        <package android:name="com.noshufou.android.su" />
+        <package android:name="com.noshufou.android.su.elite" />
+
+        <!-- KingRoot / KingoRoot -->
+        <package android:name="com.kingroot.kinguser" />
+        <package android:name="com.kingouser.com" />
+    </queries>
+
+</manifest>

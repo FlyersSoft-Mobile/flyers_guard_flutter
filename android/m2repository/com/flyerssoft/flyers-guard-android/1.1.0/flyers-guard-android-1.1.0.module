@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.flyerssoft",
+    "module": "flyers-guard-android",
+    "version": "1.1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.3.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flyers-guard-android-1.1.0.aar",
+          "url": "flyers-guard-android-1.1.0.aar",
+          "size": 13607,
+          "sha512": "ff320d04e7ae0d8de855159db9a0a1e5da8a9f6ae813745dba6671a72ba723bc180c7fdd509d2bebe9b6924083f14a70ae9d64524e8dd8f7ceb89b42da62f1cc",
+          "sha256": "0a0ab95216626a94846c6dc6a6528c78b06cd7b0f3ec30c5b9827c360d8e195b",
+          "sha1": "23deb85b95a39afc7d4f5c7580296032e1b6fd4b",
+          "md5": "56ce7e64a14997b6c23a9fcdf34c3336"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.android.play",
+          "module": "integrity",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flyers-guard-android-1.1.0.aar",
+          "url": "flyers-guard-android-1.1.0.aar",
+          "size": 13607,
+          "sha512": "ff320d04e7ae0d8de855159db9a0a1e5da8a9f6ae813745dba6671a72ba723bc180c7fdd509d2bebe9b6924083f14a70ae9d64524e8dd8f7ceb89b42da62f1cc",
+          "sha256": "0a0ab95216626a94846c6dc6a6528c78b06cd7b0f3ec30c5b9827c360d8e195b",
+          "sha1": "23deb85b95a39afc7d4f5c7580296032e1b6fd4b",
+          "md5": "56ce7e64a14997b6c23a9fcdf34c3336"
+        }
+      ]
+    }
+  ]
+}
