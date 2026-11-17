@@ -54,6 +54,20 @@ class RootCheckReport {
   final Map<dynamic, dynamic> _m;
 
   bool get isRooted => _m['isRooted'] as bool? ?? false;
+
+  /// Names of the *hard* signals that fired — strong, low-false-positive
+  /// evidence; any one of these decides [isRooted]. Possible values:
+  /// `suBinary`, `knownRootApp`, `testKeys`, `roDebuggable`, `verifiedBootRed`.
+  List<String> get hardSignals =>
+      List<String>.from(_m['hardSignals'] as List? ?? const []);
+
+  /// Names of the *soft* signals that fired — weak/ambiguous heuristics that
+  /// are reported but do **not** decide [isRooted] on their own. Possible
+  /// values: `shellSu`, `roSecureZero`, `debugBuildType`,
+  /// `suspiciousFingerprint`, `verifiedBootOrange`.
+  List<String> get softSignals =>
+      List<String>.from(_m['softSignals'] as List? ?? const []);
+
   bool get suBinaryFound => _m['suBinaryFound'] as bool? ?? false;
   List<String> get suBinaryPathsFound =>
       List<String>.from(_m['suBinaryPathsFound'] as List? ?? const []);
@@ -75,11 +89,24 @@ class JailbreakCheckReport {
   final Map<dynamic, dynamic> _m;
 
   bool get isJailbroken => _m['isJailbroken'] as bool? ?? false;
+
+  /// `true` when running in the iOS Simulator. The file-path check matches
+  /// host-Mac binaries there, so [isJailbroken] is forced to `false` on the
+  /// Simulator — use this flag to tell "clean device" from "Simulator".
+  bool get isSimulator => _m['isSimulator'] as bool? ?? false;
+
   bool get suspiciousPathFound => _m['suspiciousPathFound'] as bool? ?? false;
   List<String> get suspiciousPathsFound =>
       List<String>.from(_m['suspiciousPathsFound'] as List? ?? const []);
   bool get sandboxWriteViolationFound => _m['sandboxWriteViolationFound'] as bool? ?? false;
   bool get cydiaUrlSchemeRegistered => _m['cydiaUrlSchemeRegistered'] as bool? ?? false;
+
+  /// The jailbreak URL schemes that were openable (a subset of `cydia`,
+  /// `sileo`, `zbra`, `undecimus`). Non-empty only when the host app declares
+  /// them in `LSApplicationQueriesSchemes`. [cydiaUrlSchemeRegistered] is
+  /// `true` when this is non-empty.
+  List<String> get suspiciousUrlSchemesFound =>
+      List<String>.from(_m['suspiciousUrlSchemesFound'] as List? ?? const []);
 }
 
 /// Entry point. Pure pass-through to the native binaries.

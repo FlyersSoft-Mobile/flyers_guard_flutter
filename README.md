@@ -30,13 +30,17 @@ sensitive features).
 
 | # | Check | What it looks at |
 |---|-------|-------------------|
-| 1 | File & path detection | `/Applications/Cydia.app`, `MobileSubstrate.dylib`, `/usr/sbin/sshd`, `/usr/bin/ssh`, `/etc/apt` |
+| 1 | File & path detection | Jailbreak apps and tooling — Cydia / Sileo / Zebra, MobileSubstrate, rootless `/var/jb`, `sshd` / `ssh` / `bash`, apt dirs |
 | 2 | Sandbox violation | Tries to write a file outside the app sandbox (`/private/jailbreak.test`) |
-| 3 | Custom URL scheme probing | Whether a `cydia://` handler is registered |
+| 3 | Custom URL scheme probing | Whether a jailbreak handler (`cydia`, `sileo`, `zbra`, `undecimus`) is registered |
 
-**The verdict.** The device is reported as rooted / jailbroken if **any single
-check** fires (defense in depth). A clean, unmodified retail device returns
-`false` for every check.
+**The verdict.** On **iOS**, the device is reported as jailbroken if **any
+single check** fires. On **Android**, the verdict (`isRooted`) is driven by
+*hard* signals only (strong, low-false-positive evidence); *soft* signals
+(weak/ambiguous heuristics) are reported separately so a single weak heuristic
+can never lock out a legitimate user — see the breakdown below. A clean,
+unmodified retail device returns `false` / empty for every check. On the iOS
+Simulator the verdict is always `false` (see the Simulator note).
 
 
 ---
@@ -74,11 +78,14 @@ For the `cydia://` scheme check to work, declare the scheme in your app's
 <key>LSApplicationQueriesSchemes</key>
 <array>
   <string>cydia</string>
+  <string>sileo</string>
+  <string>zbra</string>
+  <string>undecimus</string>
 </array>
 ```
 
-Without this entry iOS always reports the scheme as unregistered, so that one
-check silently does nothing. Minimum deployment target: **iOS 12**. After
+Without these entries iOS always reports the schemes as unregistered, so that
+one check silently does nothing. Minimum deployment target: **iOS 12**. After
 adding the dependency, run `pod install` in `ios/` if your setup does not do it
 automatically.
 
@@ -119,7 +126,9 @@ the user.
 ```dart
 final RootCheckReport report = await FlyersGuard.getRootCheckReport();
 
-report.isRooted;                              // overall verdict
+report.isRooted;                              // overall verdict (hard signals only)
+report.hardSignals;                           // e.g. [suBinary, testKeys] — these decide isRooted
+report.softSignals;                           // e.g. [verifiedBootOrange] — reported, not deciding
 report.suBinaryFound;                         // bool
 report.suBinaryPathsFound;                    // e.g. [/system/bin/su]
 report.knownRootAppFound;                     // bool
@@ -136,11 +145,13 @@ report.verifiedBootState.isSuspicious;        // true for orange / red
 ```dart
 final JailbreakCheckReport report = await FlyersGuard.getJailbreakCheckReport();
 
-report.isJailbroken;                 // overall verdict
+report.isJailbroken;                 // overall verdict (always false on the Simulator)
+report.isSimulator;                  // bool — true in the iOS Simulator
 report.suspiciousPathFound;          // bool
 report.suspiciousPathsFound;         // e.g. [/Applications/Cydia.app]
 report.sandboxWriteViolationFound;   // bool
 report.cydiaUrlSchemeRegistered;     // bool
+report.suspiciousUrlSchemesFound;    // e.g. [cydia, sileo]
 ```
 
 ### What each value means
@@ -151,7 +162,9 @@ A normal, unmodified device returns `false` / empty / `green` for all of these.
 
 | Value | Meaning · suspicious when |
 |-------|---------------------------|
-| `isRooted` | Overall verdict — `true` if any check below fires. |
+| `isRooted` | Overall verdict — `true` if any **hard** signal fired. |
+| `hardSignals` | The hard signals that fired (`suBinary`, `knownRootApp`, `testKeys`, `roDebuggable`, `verifiedBootRed`). Any one of these makes `isRooted` true. |
+| `softSignals` | Weak/ambiguous signals that fired (`shellSu`, `roSecureZero`, `debugBuildType`, `suspiciousFingerprint`, `verifiedBootOrange`). Reported for your own policy; they do **not** set `isRooted` alone. |
 | `suBinaryFound` / `suBinaryPathsFound` | The `su` (superuser) program exists on the device. Stock Android does not ship it. Suspicious when found. |
 | `knownRootAppFound` / `knownRootAppsFound` | A root-manager app (Magisk, SuperSU, KingRoot…) is installed. |
 | `shellSuExecutable` | The app could actually run `su` and gain root. Catches a hidden `su` that still works. |
@@ -163,16 +176,18 @@ A normal, unmodified device returns `false` / empty / `green` for all of these.
 
 | Value | Meaning · suspicious when |
 |-------|---------------------------|
-| `isJailbroken` | Overall verdict — `true` if any check below fires. |
-| `suspiciousPathFound` / `suspiciousPathsFound` | Files that exist only on jailbroken devices were found (Cydia, MobileSubstrate, sshd…). |
+| `isJailbroken` | Overall verdict — `true` if any check below fires. Always `false` on the Simulator. |
+| `isSimulator` | `true` when running in the iOS Simulator. Lets you tell a genuinely clean device from a Simulator run. |
+| `suspiciousPathFound` / `suspiciousPathsFound` | Files that exist only on jailbroken devices were found (Cydia / Sileo / Zebra, MobileSubstrate, rootless `/var/jb`, sshd…). |
 | `sandboxWriteViolationFound` | The app could write outside its sandbox — iOS normally forbids this. A strong jailbreak signal. |
-| `cydiaUrlSchemeRegistered` | Something can open `cydia://` links (the jailbreak app store). Requires the `Info.plist` entry above. |
+| `cydiaUrlSchemeRegistered` / `suspiciousUrlSchemesFound` | Something can open a jailbreak app-store scheme (`cydia`, `sileo`, `zbra`, `undecimus`). Requires the `Info.plist` entries above. |
 
-> **iOS Simulator note:** on the Simulator the file-path check almost always
-> reports a *false positive* — `/usr/sbin/sshd` and `/usr/bin/ssh` are real
-> binaries on the host Mac, because Simulator apps run as native macOS
-> processes. Always validate the "not jailbroken" path on a **real,
-> non-jailbroken iPhone**.
+> **iOS Simulator note:** on the Simulator the file-path check matches real
+> host-Mac binaries (`/usr/sbin/sshd`, `/usr/bin/ssh`), because Simulator apps
+> run as native macOS processes. To avoid a guaranteed false positive,
+> `isJailbroken` is forced to `false` on the Simulator and `isSimulator` is set
+> to `true` — the raw `suspiciousPathsFound` list is still populated. Always
+> validate the "not jailbroken" path on a **real, non-jailbroken iPhone**.
 
 ---
 
