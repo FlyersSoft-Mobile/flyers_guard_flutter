@@ -1,3 +1,7 @@
+## Unreleased
+- **Breaking:** license validation. Call `FlyersGuard.initialize(packageId:, licenseKey:)` before any check; it validates against the FlyersSoft Supabase backend (`validate_package` RPC) and returns a `LicenseResult`. Checks throw `FlyersGuardLicenseException` until a valid license is confirmed.
+- New native method `getAppId` (Android package name / iOS bundle ID), sent with the validation so licenses can be locked to specific apps.
+
 ## 0.2.0
 - Surface the native SDKs' new report fields (additive; existing fields unchanged):
   - Android `RootCheckReport`: `hardSignals` and `softSignals` — the verdict (`isRooted`) is now driven by hard signals only; soft signals are reported but do not decide it.

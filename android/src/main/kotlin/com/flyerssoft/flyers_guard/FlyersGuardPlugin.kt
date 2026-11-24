@@ -40,6 +40,7 @@ class FlyersGuardPlugin : FlutterPlugin, MethodCallHandler {
             return
         }
         when (call.method) {
+            "getAppId" -> result.success(context.packageName)
             "getRootCheckReport" -> runOffThread {
                 val report = FlyersGuard.getRootCheckReport(context)
                 mainHandler.post { result.success(report) }

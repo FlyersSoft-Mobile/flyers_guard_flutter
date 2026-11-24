@@ -7,7 +7,12 @@
 /// already decided.
 library flyers_guard;
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+
+part 'src/license.dart';
 
 const MethodChannel _channel = MethodChannel('flyers_guard');
 
@@ -110,11 +115,57 @@ class JailbreakCheckReport {
 }
 
 /// Entry point. Pure pass-through to the native binaries.
+///
+/// Call [initialize] with the package ID and license key you were issued
+/// before using any check; until a valid license is confirmed every check
+/// throws [FlyersGuardLicenseException].
 class FlyersGuard {
   FlyersGuard._();
 
+  static LicenseResult? _license;
+
+  /// The result of the last [initialize] call, or `null` if never called.
+  static LicenseResult? get license => _license;
+
+  /// Validates [packageId] and [licenseKey] with the FlyersSoft license
+  /// server. The app's package name (Android) / bundle ID (iOS) is sent too,
+  /// so a license can be locked to specific apps.
+  ///
+  /// Never throws; check [LicenseResult.isValid]. Calling it again
+  /// re-validates (for example after a `network_error`).
+  static Future<LicenseResult> initialize({
+    required String packageId,
+    required String licenseKey,
+  }) async {
+    String? appId;
+    try {
+      appId = await _channel.invokeMethod<String>('getAppId');
+    } on PlatformException {
+      appId = null;
+    } on MissingPluginException {
+      appId = null;
+    }
+    _license = await _validateLicense(
+      packageId: packageId,
+      licenseKey: licenseKey,
+      appId: appId,
+    );
+    return _license!;
+  }
+
+  static void _ensureLicensed() {
+    final license = _license;
+    if (license == null) {
+      throw const FlyersGuardLicenseException('not_initialized');
+    }
+    if (!license.isValid) {
+      throw FlyersGuardLicenseException(license.reason ?? 'invalid_credentials');
+    }
+  }
+
   /// Android: the full root-check report, decided natively.
   static Future<RootCheckReport> getRootCheckReport() async {
+    _ensureLicensed();
     final result = await _channel.invokeMethod<Map<dynamic, dynamic>>('getRootCheckReport');
     return RootCheckReport._(result ?? const {});
   }
@@ -124,6 +175,7 @@ class FlyersGuard {
 
   /// iOS: the full jailbreak-check report, decided natively.
   static Future<JailbreakCheckReport> getJailbreakCheckReport() async {
+    _ensureLicensed();
     final result = await _channel.invokeMethod<Map<dynamic, dynamic>>('getJailbreakCheckReport');
     return JailbreakCheckReport._(result ?? const {});
   }
@@ -136,6 +188,7 @@ class FlyersGuard {
   /// [projectNumber]; on iOS those are ignored and the jailbreak verdict is
   /// returned. Fail-open on the server step.
   static Future<bool> isDeviceCompromised({String? backendUrl, String? projectNumber}) async {
+    _ensureLicensed();
     final result = await _channel.invokeMethod<bool>('isDeviceCompromised', {
       'backendUrl': backendUrl ?? '',
       'projectNumber': projectNumber ?? '',

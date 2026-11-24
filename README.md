@@ -93,6 +93,29 @@ automatically.
 
 ## Usage
 
+### 0. Initialize with your license (required)
+
+FlyersSoft issues every client a **package ID** and a **license key**. Call
+`initialize` once, before any check (for example in `main()`):
+
+```dart
+final license = await FlyersGuard.initialize(
+  packageId: 'PKG-ACME-001',
+  licenseKey: 'your-license-key',
+);
+if (!license.isValid) {
+  // license.reason: invalid_credentials | revoked | expired |
+  // app_not_allowed | network_error | server_error | not_configured
+}
+```
+
+Until a valid license is confirmed, every check throws
+`FlyersGuardLicenseException`. The app's package name (Android) / bundle ID
+(iOS) is sent along, so a license can be locked to specific apps. After a
+`network_error`, call `initialize` again to retry.
+
+### 1. Run the checks
+
 Import the package and call the check for the platform you are on. Android
 methods run on Android, iOS methods on iOS — guard with `Platform.isAndroid` /
 `Platform.isIOS` from `dart:io`.
@@ -195,6 +218,7 @@ A normal, unmodified device returns `false` / empty / `green` for all of these.
 
 | Method | Platform | Returns |
 |--------|----------|---------|
+| `FlyersGuard.initialize(packageId:, licenseKey:)` | Both | `Future<LicenseResult>` |
 | `FlyersGuard.isDeviceRooted()` | Android | `Future<bool>` |
 | `FlyersGuard.getRootCheckReport()` | Android | `Future<RootCheckReport>` |
 | `FlyersGuard.isDeviceJailbroken()` | iOS | `Future<bool>` |

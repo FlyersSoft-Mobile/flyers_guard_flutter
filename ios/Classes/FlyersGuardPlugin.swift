@@ -13,6 +13,8 @@ public class FlyersGuardPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
+    case "getAppId":
+      result(Bundle.main.bundleIdentifier)
     case "getJailbreakCheckReport":
       DispatchQueue.global(qos: .userInitiated).async {
         let report = FlyersGuard.jailbreakCheckReport()
