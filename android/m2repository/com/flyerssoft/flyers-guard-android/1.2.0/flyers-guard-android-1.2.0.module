@@ -3,7 +3,7 @@
   "component": {
     "group": "com.flyerssoft",
     "module": "flyers-guard-android",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -33,13 +33,13 @@
       ],
       "files": [
         {
-          "name": "flyers-guard-android-1.1.0.aar",
-          "url": "flyers-guard-android-1.1.0.aar",
-          "size": 13607,
-          "sha512": "ff320d04e7ae0d8de855159db9a0a1e5da8a9f6ae813745dba6671a72ba723bc180c7fdd509d2bebe9b6924083f14a70ae9d64524e8dd8f7ceb89b42da62f1cc",
-          "sha256": "0a0ab95216626a94846c6dc6a6528c78b06cd7b0f3ec30c5b9827c360d8e195b",
-          "sha1": "23deb85b95a39afc7d4f5c7580296032e1b6fd4b",
-          "md5": "56ce7e64a14997b6c23a9fcdf34c3336"
+          "name": "flyers-guard-android-1.2.0.aar",
+          "url": "flyers-guard-android-1.2.0.aar",
+          "size": 30925,
+          "sha512": "621422d37c25b2d2c392d95aa6e4e298249ace12f9d9c76c7f96176ede28ea3b0b710c7ff674642dca03c78a81d142b1814f756c4f7fbd2c0cb8346707bc895a",
+          "sha256": "75b09345c31f53eb55b6204216f18de10274bdace8bdc55da9f4bbe297c05397",
+          "sha1": "d71dd35e282be1e66e895c9fe8710f0cf42c313d",
+          "md5": "cf92639c21bde641ba9bee76e6dbec2f"
         }
       ]
     },
@@ -69,13 +69,13 @@
       ],
       "files": [
         {
-          "name": "flyers-guard-android-1.1.0.aar",
-          "url": "flyers-guard-android-1.1.0.aar",
-          "size": 13607,
-          "sha512": "ff320d04e7ae0d8de855159db9a0a1e5da8a9f6ae813745dba6671a72ba723bc180c7fdd509d2bebe9b6924083f14a70ae9d64524e8dd8f7ceb89b42da62f1cc",
-          "sha256": "0a0ab95216626a94846c6dc6a6528c78b06cd7b0f3ec30c5b9827c360d8e195b",
-          "sha1": "23deb85b95a39afc7d4f5c7580296032e1b6fd4b",
-          "md5": "56ce7e64a14997b6c23a9fcdf34c3336"
+          "name": "flyers-guard-android-1.2.0.aar",
+          "url": "flyers-guard-android-1.2.0.aar",
+          "size": 30925,
+          "sha512": "621422d37c25b2d2c392d95aa6e4e298249ace12f9d9c76c7f96176ede28ea3b0b710c7ff674642dca03c78a81d142b1814f756c4f7fbd2c0cb8346707bc895a",
+          "sha256": "75b09345c31f53eb55b6204216f18de10274bdace8bdc55da9f4bbe297c05397",
+          "sha1": "d71dd35e282be1e66e895c9fe8710f0cf42c313d",
+          "md5": "cf92639c21bde641ba9bee76e6dbec2f"
         }
       ]
     }

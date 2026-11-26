@@ -9,8 +9,26 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.flyerssoft</groupId>
   <artifactId>flyers-guard-android</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
   <packaging>aar</packaging>
+  <name>FlyersGuard Android SDK</name>
+  <description>Obfuscated root/tamper-detection SDK for Android, vendored into the FlyersGuard Flutter wrapper.</description>
+  <url>https://github.com/FlyersSoft-Mobile/flyers_guard_android</url>
+  <organization>
+    <name>FlyersSoft</name>
+    <url>https://github.com/FlyersSoft-Mobile</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Proprietary</name>
+      <comments>Proprietary - FlyersSoft. All rights reserved.</comments>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:https://github.com/FlyersSoft-Mobile/flyers_guard_android.git</connection>
+    <developerConnection>scm:git:git@github.com:FlyersSoft-Mobile/flyers_guard_android.git</developerConnection>
+    <url>https://github.com/FlyersSoft-Mobile/flyers_guard_android</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>

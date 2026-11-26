@@ -7,9 +7,34 @@
 /// already decided.
 library flyers_guard;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+/// Legacy channel. Still used for iOS; on Android the plugin serves it too.
 const MethodChannel _channel = MethodChannel('flyers_guard');
+
+/// Android native channel. Its handler lives inside the FlyersGuard AAR
+/// (`com.flyerssoft.guard.FlyersGuardChannel`); the plugin only forwards.
+const MethodChannel _nativeChannel = MethodChannel(_Keys.nativeChannel);
+
+/// Channel contract with the Android SDK. Must match `FlyersGuardChannel`.
+abstract final class _Keys {
+  static const nativeChannel = 'flyers_guard/native';
+
+  // Method keys.
+  static const getRootCheckReport = 'getRootCheckReport';
+  static const isDeviceCompromised = 'isDeviceCompromised';
+  static const requestIntegrityToken = 'requestIntegrityToken';
+  static const getJailbreakCheckReport = 'getJailbreakCheckReport';
+
+  // Argument keys.
+  static const backendUrl = 'backendUrl';
+  static const projectNumber = 'projectNumber';
+  static const failClosed = 'failClosed';
+  static const payload = 'payload';
+}
+
+bool get _isAndroid => defaultTargetPlatform == TargetPlatform.android;
 
 /// Android system-property findings (values and verdicts decided natively).
 class SystemPropertiesFindings {
@@ -115,7 +140,8 @@ class FlyersGuard {
 
   /// Android: the full root-check report, decided natively.
   static Future<RootCheckReport> getRootCheckReport() async {
-    final result = await _channel.invokeMethod<Map<dynamic, dynamic>>('getRootCheckReport');
+    final result =
+        await _nativeChannel.invokeMethod<Map<dynamic, dynamic>>(_Keys.getRootCheckReport);
     return RootCheckReport._(result ?? const {});
   }
 
@@ -124,7 +150,8 @@ class FlyersGuard {
 
   /// iOS: the full jailbreak-check report, decided natively.
   static Future<JailbreakCheckReport> getJailbreakCheckReport() async {
-    final result = await _channel.invokeMethod<Map<dynamic, dynamic>>('getJailbreakCheckReport');
+    final result =
+        await _channel.invokeMethod<Map<dynamic, dynamic>>(_Keys.getJailbreakCheckReport);
     return JailbreakCheckReport._(result ?? const {});
   }
 
@@ -134,12 +161,42 @@ class FlyersGuard {
   /// Combined verdict, decided entirely by the native SDK. On Android it
   /// additionally verifies a Play Integrity token with [backendUrl] /
   /// [projectNumber]; on iOS those are ignored and the jailbreak verdict is
-  /// returned. Fail-open on the server step.
-  static Future<bool> isDeviceCompromised({String? backendUrl, String? projectNumber}) async {
-    final result = await _channel.invokeMethod<bool>('isDeviceCompromised', {
-      'backendUrl': backendUrl ?? '',
-      'projectNumber': projectNumber ?? '',
-    });
+  /// returned.
+  ///
+  /// Android only: when the backend step cannot complete, [failClosed] `false`
+  /// (the default) falls back to the local verdict; `true` reports the device
+  /// as compromised.
+  static Future<bool> isDeviceCompromised({
+    String? backendUrl,
+    String? projectNumber,
+    bool failClosed = false,
+  }) async {
+    final result = await (_isAndroid ? _nativeChannel : _channel).invokeMethod<bool>(
+      _Keys.isDeviceCompromised,
+      {
+        _Keys.backendUrl: backendUrl ?? '',
+        _Keys.projectNumber: projectNumber ?? '',
+        _Keys.failClosed: failClosed,
+      },
+    );
     return result ?? false;
+  }
+
+  /// Android: requests a Play Integrity Standard token bound to the SHA-256
+  /// of [payload], for your Google Cloud [projectNumber]. Verify the token on
+  /// your backend.
+  ///
+  /// Throws a [PlatformException] with code `INVALID_ARGUMENT` (missing
+  /// payload or non-numeric project number) or `TOKEN_FAILED` (Play
+  /// Integrity error; `details` holds the SDK's own error code).
+  static Future<String> requestIntegrityToken({
+    required String payload,
+    required String projectNumber,
+  }) async {
+    final token = await _nativeChannel.invokeMethod<String>(
+      _Keys.requestIntegrityToken,
+      {_Keys.payload: payload, _Keys.projectNumber: projectNumber},
+    );
+    return token ?? '';
   }
 }

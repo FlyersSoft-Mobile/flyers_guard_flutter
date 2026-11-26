@@ -199,9 +199,21 @@ A normal, unmodified device returns `false` / empty / `green` for all of these.
 | `FlyersGuard.getRootCheckReport()` | Android | `Future<RootCheckReport>` |
 | `FlyersGuard.isDeviceJailbroken()` | iOS | `Future<bool>` |
 | `FlyersGuard.getJailbreakCheckReport()` | iOS | `Future<JailbreakCheckReport>` |
+| `FlyersGuard.isDeviceCompromised({backendUrl, projectNumber, failClosed})` | Android, iOS | `Future<bool>` |
+| `FlyersGuard.requestIntegrityToken({payload, projectNumber})` | Android | `Future<String>` (Play Integrity token) |
+
+### How Android calls reach the SDK
+
+On Android the Dart API talks to the `flyers_guard/native` method channel. Its
+handler, `com.flyerssoft.guard.FlyersGuardChannel`, ships **inside the AAR**:
+it owns the method keys, argument keys, threading and error codes. The
+plugin's Kotlin class only forwards each call's method key and arguments to
+it. Errors arrive as `PlatformException` with code `INVALID_ARGUMENT`,
+`TOKEN_FAILED` or `INTERNAL`. The legacy `flyers_guard` channel is still
+served (and is what iOS uses).
 
 ## Requirements
 
 - Flutter `>= 3.10`, Dart `>= 3.0`
-- Android `minSdk 21`
+- Android `minSdk 21`, `compileSdk 36` (required by the vendored AAR)
 - iOS `12.0+`
