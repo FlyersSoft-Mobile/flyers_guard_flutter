@@ -22,6 +22,7 @@ void main() {
   test('initialize never throws and gates checks on failure', () async {
     final result = await FlyersGuard.initialize(
       packageId: 'PKG-TEST',
+      clientId: 'CLIENT-TEST',
       licenseKey: 'wrong-key',
     );
     expect(result.isValid, isFalse);

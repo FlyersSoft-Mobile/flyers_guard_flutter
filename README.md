@@ -95,12 +95,14 @@ automatically.
 
 ### 0. Initialize with your license (required)
 
-FlyersSoft issues every client a **package ID** and a **license key**. Call
-`initialize` once, before any check (for example in `main()`):
+FlyersSoft issues every client a **package ID** (shared by all clients), a
+**client ID** and a **license key** (both unique to you). Call `initialize`
+once, before any check (for example in `main()`):
 
 ```dart
 final license = await FlyersGuard.initialize(
-  packageId: 'PKG-ACME-001',
+  packageId: 'PKG-FLYERS-DSC',
+  clientId: 'CLIENT-XXX',
   licenseKey: 'your-license-key',
 );
 if (!license.isValid) {
@@ -218,7 +220,7 @@ A normal, unmodified device returns `false` / empty / `green` for all of these.
 
 | Method | Platform | Returns |
 |--------|----------|---------|
-| `FlyersGuard.initialize(packageId:, licenseKey:)` | Both | `Future<LicenseResult>` |
+| `FlyersGuard.initialize(packageId:, clientId:, licenseKey:)` | Both | `Future<LicenseResult>` |
 | `FlyersGuard.isDeviceRooted()` | Android | `Future<bool>` |
 | `FlyersGuard.getRootCheckReport()` | Android | `Future<RootCheckReport>` |
 | `FlyersGuard.isDeviceJailbroken()` | iOS | `Future<bool>` |

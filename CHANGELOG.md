@@ -1,5 +1,6 @@
 ## Unreleased
-- **Breaking:** license validation. Call `FlyersGuard.initialize(packageId:, licenseKey:)` before any check; it validates against the FlyersSoft Supabase backend (`validate_package` RPC) and returns a `LicenseResult`. Checks throw `FlyersGuardLicenseException` until a valid license is confirmed.
+- **Breaking:** license validation. Call `FlyersGuard.initialize(packageId:, clientId:, licenseKey:)` before any check; it validates against the FlyersSoft Supabase backend (`validate_package` RPC) and returns a `LicenseResult`. A license is identified by package ID + client ID + key: many clients share one package ID. Checks throw `FlyersGuardLicenseException` until a valid license is confirmed.
+- Supabase SQL: `supabase/01_setup_package_licenses.sql` (table + API), `supabase/clients/` (one file per sample client: 1-hour trial, expired, revoked, lifetime, 1-year subscription), `supabase/02_manage_clients.sql`.
 - New native method `getAppId` (Android package name / iOS bundle ID), sent with the validation so licenses can be locked to specific apps.
 
 ## 0.2.0

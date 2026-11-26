@@ -116,7 +116,8 @@ class JailbreakCheckReport {
 
 /// Entry point. Pure pass-through to the native binaries.
 ///
-/// Call [initialize] with the package ID and license key you were issued
+/// Call [initialize] with the package ID, client ID and license key you were
+/// issued
 /// before using any check; until a valid license is confirmed every check
 /// throws [FlyersGuardLicenseException].
 class FlyersGuard {
@@ -127,14 +128,16 @@ class FlyersGuard {
   /// The result of the last [initialize] call, or `null` if never called.
   static LicenseResult? get license => _license;
 
-  /// Validates [packageId] and [licenseKey] with the FlyersSoft license
-  /// server. The app's package name (Android) / bundle ID (iOS) is sent too,
+  /// Validates [packageId], [clientId] and [licenseKey] with the FlyersSoft
+  /// license server. All clients of a package share the same [packageId];
+  /// each client has its own [clientId] and [licenseKey]. The app's package name (Android) / bundle ID (iOS) is sent too,
   /// so a license can be locked to specific apps.
   ///
   /// Never throws; check [LicenseResult.isValid]. Calling it again
   /// re-validates (for example after a `network_error`).
   static Future<LicenseResult> initialize({
     required String packageId,
+    required String clientId,
     required String licenseKey,
   }) async {
     String? appId;
@@ -147,6 +150,7 @@ class FlyersGuard {
     }
     _license = await _validateLicense(
       packageId: packageId,
+      clientId: clientId,
       licenseKey: licenseKey,
       appId: appId,
     );

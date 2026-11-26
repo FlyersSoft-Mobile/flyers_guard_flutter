@@ -11,12 +11,14 @@ const String _supabaseAnonKey = 'sb_publishable_3TDmLzphHzJCyt1hbSYqEQ_8net2wqV'
 
 const Duration _licenseTimeout = Duration(seconds: 10);
 
-/// Result of validating a package ID + license key against the backend.
+/// Result of validating a package ID + client ID + license key against the
+/// backend.
 class LicenseResult {
   const LicenseResult._({
     required this.isValid,
     this.reason,
     this.clientName,
+    this.clientId,
     this.expiresAt,
   });
 
@@ -31,12 +33,15 @@ class LicenseResult {
   /// The client name registered for this license.
   final String? clientName;
 
+  /// The client ID this license belongs to.
+  final String? clientId;
+
   /// When the license expires, or `null` if it never does.
   final DateTime? expiresAt;
 
   @override
   String toString() => isValid
-      ? 'LicenseResult(valid, client: $clientName, expiresAt: $expiresAt)'
+      ? 'LicenseResult(valid, client: $clientName ($clientId), expiresAt: $expiresAt)'
       : 'LicenseResult(invalid, reason: $reason)';
 }
 
@@ -56,6 +61,7 @@ class FlyersGuardLicenseException implements Exception {
 /// returned as an invalid [LicenseResult] with a [LicenseResult.reason].
 Future<LicenseResult> _validateLicense({
   required String packageId,
+  required String clientId,
   required String licenseKey,
   required String? appId,
 }) async {
@@ -74,6 +80,7 @@ Future<LicenseResult> _validateLicense({
       ..contentType = ContentType.json;
     request.write(jsonEncode({
       'p_package_id': packageId,
+      'p_client_id': clientId,
       'p_key': licenseKey,
       'p_app_id': appId,
     }));
@@ -99,6 +106,7 @@ Future<LicenseResult> _validateLicense({
     return LicenseResult._(
       isValid: true,
       clientName: json['client'] as String?,
+      clientId: json['client_id'] as String?,
       expiresAt: expires == null ? null : DateTime.tryParse(expires),
     );
   } on FormatException {
